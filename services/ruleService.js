@@ -6,6 +6,7 @@ exports.createRule = (ruleString) => {
 };
 
 exports.combineRules = (asts) => {
+  console.log("asts in combine rules", asts);
   return astService.combineASTs(asts);
 };
 

@@ -25,6 +25,7 @@ exports.getRules = async (req, res) => {
 };
 
 exports.combineRules = async (req, res) => {
+  console.log("combine rules body", req.body);
   const { ruleIds } = req.body;
   try {
     const rules = await Rule.find({ _id: { $in: ruleIds } });
@@ -36,10 +37,10 @@ exports.combineRules = async (req, res) => {
 };
 
 exports.evaluateRule = async (req, res) => {
-  const { ruleId, data } = req.body;
+  const { rule, data } = req.body;
   try {
-    const rule = await Rule.findById(ruleId);
-    const result = ruleService.evaluateRule(rule.ast, data);
+    // const rule = await Rule.findById(rule);
+    const result = ruleService.evaluateRule(rule, data);
     res.status(200).json({ success: true, result });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });

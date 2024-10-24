@@ -84,3 +84,23 @@ exports.parseRuleString = (ruleString) => {
     throw error;
   }
 };
+
+exports.evaluateAST = (rule, data) => {
+  const sanitizedRule = rule.replace(/=/g, "==="); // Replace '=' with '==='
+
+  const evaluatedRule = sanitizedRule
+    .replace(/AND/g, "&&")
+    .replace(/OR/g, "||")
+    .replace(/experience/g, Number(data.experience))
+    .replace(/age/g, Number(data.age))
+    .replace(/salary/g, Number(data.salary))
+    .replace(/department/g, JSON.stringify(data.department));
+
+  try {
+    const result = new Function(`return ${evaluatedRule}`)();
+    return result;
+  } catch (error) {
+    console.error("Error evaluating rule:", error);
+    return false; // Return false if there's an error in the rule
+  }
+};
